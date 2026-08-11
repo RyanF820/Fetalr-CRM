@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM & Calculadora Gestacional | Clínica DoutorMed</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Cores Padrão (Modo Claro - Verde DoutorMed) */
+        :root {
+            --primary-color: #00875A;
+            --primary-hover: #006644;
+            --primary-light: #ecfdf5;
+            --primary-border: rgba(0, 135, 90, 0.15);
+            --bg-main: #f4f7f6;
+            --bg-card: #ffffff;
+            --bg-nav: #ffffff;
+            --border-color: #e5e7eb;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --input-bg: #f9fafb;
+        }
+
+        /* Temas Claros */
+        .theme-green { 
+            --primary-color: #00875A; --primary-hover: #006644; --primary-light: #ecfdf5; --primary-border: rgba(0, 135, 90, 0.15);
+            --bg-main: #f4f7f6; --bg-card: #ffffff; --bg-nav: #ffffff; --border-color: #e5e7eb; --text-main: #1f2937; --text-muted: #6b7280; --input-bg: #f9fafb;
+        }
+        .theme-blue { 
+            --primary-color: #0284c7; --primary-hover: #0369a1; --primary-light: #f0f9ff; --primary-border: rgba(2, 132, 199, 0.15);
+            --bg-main: #f4f7f6; --bg-card: #ffffff; --bg-nav: #ffffff; --border-color: #e5e7eb; --text-main: #1f2937; --text-muted: #6b7280; --input-bg: #f9fafb;
+        }
+        .theme-rose { 
+            --primary-color: #e11d48; --primary-hover: #be123c; --primary-light: #fff1f2; --primary-border: rgba(225, 29, 72, 0.15);
+            --bg-main: #f4f7f6; --bg-card: #ffffff; --bg-nav: #ffffff; --border-color: #e5e7eb; --text-main: #1f2937; --text-muted: #6b7280; --input-bg: #f9fafb;
+        }
+        .theme-purple { 
+            --primary-color: #7c3aed; --primary-hover: #6d28d9; --primary-light: #f5f3ff; --primary-border: rgba(124, 58, 237, 0.15);
+            --bg-main: #f4f7f6; --bg-card: #ffffff; --bg-nav: #ffffff; --border-color: #e5e7eb; --text-main: #1f2937; --text-muted: #6b7280; --input-bg: #f9fafb;
+        }
+
+        /* Temas Escuros Estilo X (Preto Profundo + Carvão) */
+        .dark-green {
+            --primary-color: #10b981; --primary-hover: #059669; --primary-light: rgba(16, 185, 129, 0.15); --primary-border: rgba(16, 185, 129, 0.3);
+            --bg-main: #000000; --bg-card: #16181c; --bg-nav: #000000; --border-color: #2f3336; --text-main: #e7e9ea; --text-muted: #71767b; --input-bg: #202327;
+        }
+        .dark-blue {
+            --primary-color: #1d9bf0; --primary-hover: #1a8cd8; --primary-light: rgba(29, 155, 240, 0.15); --primary-border: rgba(29, 155, 240, 0.3);
+            --bg-main: #000000; --bg-card: #16181c; --bg-nav: #000000; --border-color: #2f3336; --text-main: #e7e9ea; --text-muted: #71767b; --input-bg: #202327;
+        }
+        .dark-rose {
+            --primary-color: #f43f5e; --primary-hover: #e11d48; --primary-light: rgba(244, 63, 94, 0.15); --primary-border: rgba(244, 63, 94, 0.3);
+            --bg-main: #000000; --bg-card: #16181c; --bg-nav: #000000; --border-color: #2f3336; --text-main: #e7e9ea; --text-muted: #71767b; --input-bg: #202327;
+        }
+        .dark-purple {
+            --primary-color: #8b5cf6; --primary-hover: #7c3aed; --primary-light: rgba(139, 92, 246, 0.15); --primary-border: rgba(139, 92, 246, 0.3);
+            --bg-main: #000000; --bg-card: #16181c; --bg-nav: #000000; --border-color: #2f3336; --text-main: #e7e9ea; --text-muted: #71767b; --input-bg: #202327;
+        }
+
+        .dynamic-bg { background-color: var(--primary-color); }
+        .dynamic-bg:hover { background-color: var(--primary-hover); }
+        .dynamic-text { color: var(--primary-color); }
+        .dynamic-border { border-color: var(--primary-border); }
+        .dynamic-badge { background-color: var(--primary-light); color: var(--primary-color); border-color: var(--primary-border); }
+
+        .clinic-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        nav {
+            background-color: var(--bg-nav) !important;
+            border-color: var(--border-color) !important;
+        }
+
+        input, select {
+            background-color: var(--input-bg) !important;
+            color: var(--text-main) !important;
+            border-color: var(--border-color) !important;
+        }
+
+        table th {
+            background-color: var(--input-bg) !important;
+            color: var(--text-muted) !important;
+            border-color: var(--border-color) !important;
+        }
+
+        table td {
+            border-color: var(--border-color) !important;
+            color: var(--text-main) !important;
+        }
+
+        tr:hover {
+            background-color: var(--primary-light) !important;
+        }
+    </style>
+</head>
+<body id="app-body" class="antialiased theme-green">
+
+    <!-- BARRA DE NAVEGAÇÃO -->
+    <nav class="border-b sticky top-0 z-50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="dynamic-bg text-white p-2.5 rounded-xl shadow-md">
+                    <i class="fa-solid fa-baby-carriage text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight">FetalR <span class="dynamic-text">Gestacional</span></h1>
+                    <p class="text-xs font-medium" style="color: var(--text-muted);">Painel CRM & Gestão de Alertas • Fortaleza</p>
+                </div>
+            </div>
+
+            <!-- MENU DE TEMAS E STATUS -->
+            <div class="flex items-center space-x-4">
+                <!-- Seletor de Tema -->
+                <div class="flex items-center space-x-2 px-3 py-1.5 rounded-xl border" style="background-color: var(--input-bg); border-color: var(--border-color);">
+                    <i class="fa-solid fa-palette text-xs" style="color: var(--text-muted);"></i>
+                    <select id="theme-selector" onchange="changeTheme(this.value)" class="bg-transparent text-xs font-semibold focus:outline-none cursor-pointer">
+                        <optgroup label="Modo Claro">
+                            <option value="theme-green">🟢 Verde DoutorMed</option>
+                            <option value="theme-blue">🔵 Azul Saúde</option>
+                            <option value="theme-rose">🌸 Rosa Gestacional</option>
+                            <option value="theme-purple">🟣 Roxo Executivo</option>
+                        </optgroup>
+                        <optgroup label="Modo Escuro (Estilo X)">
+                            <option value="dark-green">⬛ Dark Verde</option>
+                            <option value="dark-blue">⬛ Dark Azul</option>
+                            <option value="dark-rose">⬛ Dark Rosa</option>
+                            <option value="dark-purple">⬛ Dark Roxo</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="text-right hidden md:block">
+                    <p class="text-xs font-semibold uppercase tracking-wider" style="color: var(--text-muted);">Data de Operação</p>
+                    <p class="text-sm font-bold">11/08/2026</p>
+                </div>
+
+                <div class="h-8 w-px hidden md:block" style="background-color: var(--border-color);"></div>
+
+                <div class="flex items-center space-x-2 dynamic-badge px-3 py-1.5 rounded-full border">
+                    <span class="w-2 h-2 dynamic-bg rounded-full animate-pulse"></span>
+                    <span class="text-xs font-semibold">CRM Ativo</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+        <!-- PAINEL DE ALERTAS -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="clinic-card p-6 flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wider" style="color: var(--text-muted);">Total Monitoradas</p>
+                    <h3 class="text-3xl font-bold mt-1" id="stat-total">0</h3>
+                    <p class="text-xs mt-1" style="color: var(--text-muted);"><i class="fa-solid fa-users dynamic-text mr-1"></i> Pacientes ativas</p>
+                </div>
+                <div class="p-4 rounded-2xl" style="background-color: var(--input-bg); color: var(--text-muted);">
+                    <i class="fa-solid fa-hospital-user text-2xl"></i>
+                </div>
+            </div>
+            <div class="clinic-card p-6 flex items-center justify-between border-l-4 border-l-red-500 cursor-pointer" onclick="setStatusFilter('today')">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wider" style="color: var(--text-muted);">Contatar Hoje 🟢</p>
+                    <h3 class="text-3xl font-bold mt-1 text-red-500" id="stat-today">0</h3>
+                    <p class="text-xs mt-1" style="color: var(--text-muted);"><i class="fa-solid fa-circle-exclamation text-red-500 mr-1"></i> Janelas abertas pendentes</p>
+                </div>
+                <div class="p-4 bg-red-500/10 rounded-2xl text-red-500">
+                    <i class="fa-solid fa-comment-sms text-2xl"></i>
+                </div>
+            </div>
+            <div class="clinic-card p-6 flex items-center justify-between border-l-4 border-l-amber-500">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wider" style="color: var(--text-muted);">Em Breve (7 dias) 🟡</p>
+                    <h3 class="text-3xl font-bold mt-1 text-amber-500" id="stat-soon">0</h3>
+                    <p class="text-xs mt-1" style="color: var(--text-muted);"><i class="fa-solid fa-clock text-amber-500 mr-1"></i> Chegando perto da data</p>
+                </div>
+                <div class="p-4 bg-amber-500/10 rounded-2xl text-amber-500">
+                    <i class="fa-solid fa-hourglass-half text-2xl"></i>
+                </div>
+            </div>
+            <div class="clinic-card p-6 flex items-center justify-between border-l-4 dynamic-border">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-wider" style="color: var(--text-muted);">Pacientes Notificadas ✅</p>
+                    <h3 class="text-3xl font-bold mt-1 dynamic-text" id="stat-sent">0</h3>
+                    <p class="text-xs mt-1" style="color: var(--text-muted);"><i class="fa-solid fa-circle-check dynamic-text mr-1"></i> Com histórico de envio</p>
+                </div>
+                <div class="p-4 dynamic-badge rounded-2xl">
+                    <i class="fa-solid fa-paper-plane text-2xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- FORMULÁRIO DE CADASTRO E CALCULADORA -->
+        <div class="clinic-card p-6">
+            <div class="flex items-center space-x-2 border-b pb-4 mb-6" style="border-color: var(--border-color);">
+                <i class="fa-solid fa-calculator dynamic-text text-lg"></i>
+                <h2 class="text-lg font-bold">Nova Paciente & Calculadora Gestacional Inteligente</h2>
+            </div>
+            <form id="patient-form" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1" style="color: var(--text-muted);">Nome Completo</label>
+                    <input type="text" id="input-name" required placeholder="Ex: Maria Silva" class="w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1" style="color: var(--text-muted);">WhatsApp (com DDD)</label>
+                    <input type="tel" id="input-phone" required placeholder="Ex: 85999999999" class="w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase mb-1" style="color: var(--text-muted);">Data do Último USG</label>
+                    <input type="date" id="input-usg-date" required class="w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none transition">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-xs font-bold uppercase mb-1" style="color: var(--text-muted);">Semanas</label>
+                        <input type="number" id="input-weeks" min="0" max="42" required placeholder="12" class="w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase mb-1" style="color: var(--text-muted);">Dias</label>
+                        <input type="number" id="input-days" min="0" max="6" required placeholder="0" class="w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none transition">
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="w-full dynamic-bg text-white font-semibold rounded-xl px-4 py-2.5 text-sm shadow-md hover:opacity-90 transition flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-plus text-xs"></i>
+                        <span>Calcular e Adicionar</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- HUB DO PIPELINE E TABELA CRM -->
+        <div class="clinic-card overflow-hidden">
+            <div class="p-6 border-b flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4" style="border-color: var(--border-color);">
+                <div class="max-w-md">
+                    <h2 class="text-lg font-bold">Hub de Monitoramento e Linha do Tempo</h2>
+                    <p class="text-xs mt-0.5" style="color: var(--text-muted);">Clique nos botões para disparar as mensagens personalizadas para cada exame.</p>
+                </div>
+                
+                <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-start lg:justify-end">
+                    <div id="filter-counter" class="text-xs font-bold dynamic-text dynamic-badge px-3 py-2 rounded-xl shadow-sm whitespace-nowrap border">
+                        Filtrados: 0
+                    </div>
+
+                    <div class="flex p-1 rounded-xl text-xs font-semibold whitespace-nowrap border" style="background-color: var(--input-bg); border-color: var(--border-color);">
+                        <button onclick="setStatusFilter('all')" id="btn-filter-all" class="px-3 py-1.5 rounded-lg transition" style="background-color: var(--bg-card);">Todos</button>
+                        <button onclick="setStatusFilter('today')" id="btn-filter-today" class="px-3 py-1.5 rounded-lg transition" style="color: var(--text-muted);">Contatar Hoje 🟢</button>
+                        <button onclick="setStatusFilter('pending')" id="btn-filter-pending" class="px-3 py-1.5 rounded-lg transition" style="color: var(--text-muted);">Aguardando</button>
+                        <button onclick="setStatusFilter('sent')" id="btn-filter-sent" class="px-3 py-1.5 rounded-lg transition" style="color: var(--text-muted);">Enviados</button>
+                    </div>
+                    
+                    <div class="relative w-full sm:w-60">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-xs" style="color: var(--text-muted);"></i>
+                        <input type="text" id="search-bar" placeholder="Buscar paciente..." class="pl-9 pr-4 py-2 border rounded-xl text-xs w-full focus:outline-none transition">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela de Pacientes -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="uppercase text-[10px] font-bold tracking-wider border-b">
+                            <th class="py-4 px-6">Paciente / Contato</th>
+                            <th class="py-4 px-4 whitespace-nowrap w-40">Idade Gestacional</th>
+                            <th class="py-4 px-4">DUM Calc.</th>
+                            <th class="py-4 px-4">Morfo 1º Tri (12s-13s+6d)</th>
+                            <th class="py-4 px-4">Sexo (16s)</th>
+                            <th class="py-4 px-4">Morfo 2º Tri (20-24s)</th>
+                            <th class="py-4 px-4">Doppler 3º Tri (28-32s)</th>
+                            <th class="py-4 px-6 text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="patient-table-body" class="divide-y text-sm font-medium">
+                        <!-- Renderizado via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL DE EDIÇÃO -->
+    <div id="edit-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden">
+        <div class="clinic-card w-full max-w-2xl p-6 m-4 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b pb-4 mb-6" style="border-color: var(--border-color);">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-pen-to-square dynamic-text text-lg"></i>
+                    <h3 class="text-lg font-bold">Editar Cadastro & Status de Exames</h3>
+                </div>
+                <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-200 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="edit-form" class="space-y-4">
+                <input type="hidden" id="edit-id">
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase mb-1" style="color: var(--text-muted);">Nome Completo</label>
+                        <input type="text" id="edit-name" required class="w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase mb-1" style="color: var(--text-muted);">WhatsApp (com DDD)</label>
+                        <input type="tel" id="edit-phone" required class="w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none transition">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase mb-1" style="color: var(--text-muted);">Data do Último USG</label>
+                        <input type="date" id="edit-usg-date" required class="w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase mb-1" style="color: var(--text-muted);">Semanas</label>
+                        <input type="number" id="edit-weeks" min="0" max="42" required class="w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase mb-1" style="color: var(--text-muted);">Dias</label>
+                        <input type="number" id="edit-days" min="0" max="6" required class="w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none transition">
+                    </div>
+                </div>
+
+                <div class="border-t pt-4 mt-4" style="border-color: var(--border-color);">
+                    <h4 class="text-xs font-bold uppercase mb-3" style="color: var(--text-muted);">Status de Envio dos Exames</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[11px] font-semibold mb-1" style="color: var(--text-muted);">Morfo 1º Tri</label>
+                            <select id="edit-morfo1" class="w-full border rounded-xl px-3 py-2 text-xs focus:outline-none">
+                                <option value="Aguardando">Aguardando</option>
+                                <option value="Enviado">Enviado</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold mb-1" style="color: var(--text-muted);">Sexo</label>
+                            <select id="edit-sexo" class="w-full border rounded-xl px-3 py-2 text-xs focus:outline-none">
+                                <option value="Aguardando">Aguardando</option>
+                                <option value="Enviado">Enviado</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold mb-1" style="color: var(--text-muted);">Morfo 2º Tri</label>
+                            <select id="edit-morfo2" class="w-full border rounded-xl px-3 py-2 text-xs focus:outline-none">
+                                <option value="Aguardando">Aguardando</option>
+                                <option value="Enviado">Enviado</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold mb-1" style="color: var(--text-muted);">Doppler 3º Tri</label>
+                            <select id="edit-doppler" class="w-full border rounded-xl px-3 py-2 text-xs focus:outline-none">
+                                <option value="Aguardando">Aguardando</option>
+                                <option value="Enviado">Enviado</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-4 border-t" style="border-color: var(--border-color);">
+                    <button type="button" onclick="closeEditModal()" class="px-4 py-2.5 text-xs font-semibold rounded-xl border transition" style="border-color: var(--border-color); color: var(--text-muted);">Cancelar</button>
+                    <button type="submit" class="dynamic-bg text-white font-semibold rounded-xl px-6 py-2.5 text-xs shadow-md hover:opacity-90 transition">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="max-w-7xl mx-auto px-6 py-8 text-center text-xs border-t mt-12" style="color: var(--text-muted); border-color: var(--border-color);">
+        <p>© 2026 Clínica DoutorMed Fortaleza. Desenvolvido com padrões Premium de Gestão em Saúde.</p>
+    </footer>
+
+    <script>
+        let patients = [
+            { "id": 1, "name": "CARLEANE RODRIGUES DE SOUSA", "phone": "85921514488", "usgDate": "2026-07-04", "weeks": 16, "days": 1, "statusMorfo1": "Enviado", "statusSexo": "Enviado", "statusMorfo2": "Enviado", "statusDoppler": "Aguardando" },
+            { "id": 2, "name": "VERONICA LIMA FERREIRA", "phone": "85984240495", "usgDate": "2026-05-18", "weeks": 12, "days": 5, "statusMorfo1": "Enviado", "statusSexo": "Enviado", "statusMorfo2": "Enviado", "statusDoppler": "Aguardando" },
+            { "id": 3, "name": "LAIS DOS SANTOS SILVEIRA", "phone": "88996725343", "usgDate": "2026-08-01", "weeks": 12, "days": 0, "statusMorfo1": "Enviado", "statusSexo": "Aguardando", "statusMorfo2": "Aguardando", "statusDoppler": "Aguardando" },
+            { "id": 4, "name": "ELENILDA AMORIM DA SILVA", "phone": "8599124255", "usgDate": "2026-06-13", "weeks": 13, "days": 2, "statusMorfo1": "Enviado", "statusSexo": "Enviado", "statusMorfo2": "Enviado", "statusDoppler": "Aguardando" },
+            { "id": 5, "name": "MARIA NILDIANE DE OLIVEIRA LIMA", "phone": "85989760936", "usgDate": "2026-08-01", "weeks": 12, "days": 1, "statusMorfo1": "Enviado", "statusSexo": "Aguardando", "statusMorfo2": "Aguardando", "statusDoppler": "Aguardando" },
+            { "id": 6, "name": "REBECA CARLOS DE PAIVA", "phone": "85991968232", "usgDate": "2026-08-01", "weeks": 23, "days": 0, "statusMorfo1": "Enviado", "statusSexo": "Enviado", "statusMorfo2": "Enviado", "statusDoppler": "Aguardando" },
+            { "id": 7, "name": "ANA CECILIA RODRIGUES RAMOS", "phone": "85991942030", "usgDate": "2026-08-01", "weeks": 23, "days": 2, "statusMorfo1": "Enviado", "statusSexo": "Enviado", "statusMorfo2": "Enviado", "statusDoppler": "Aguardando" },
+            { "id": 8, "name": "VERONICA LIMA FERREIRA", "phone": "85984240495", "usgDate": "2026-06-15", "weeks": 16, "days": 5, "statusMorfo1": "Enviado", "statusSexo": "Enviado", "statusMorfo2": "Enviado", "statusDoppler": "Aguardando" },
+            { "id": 9, "name": "LETICIA MACIEL BARBOSA", "phone": "85984832814", "usgDate": "2026-08-03", "weeks": 19, "days": 5, "statusMorfo1": "Enviado", "statusSexo": "Enviado", "statusMorfo2": "Enviado", "statusDoppler": "Aguardando" },
+            { "id": 10, "name": "CARLEANE RODRIGUES DE SOUSA", "phone": "85921514488", "usgDate": "2026-07-04", "weeks": 16, "days": 1, "statusMorfo1": "Enviado", "statusSexo": "Enviado", "statusMorfo2": "Enviado", "statusDoppler": "Aguardando" },
+            { "id": 11, "name": "SAVIA MONTENEGRO PIMENTEL MENDES", "phone": "85999122523", "usgDate": "2026-06-27", "weeks": 8, "days": 0, "statusMorfo1": "Enviado", "statusSexo": "Aguardando", "statusMorfo2": "Aguardando", "statusDoppler": "Aguardando" },
+            { "id": 12, "name": "LORENA ALVES DE SOUSA", "phone": "85996991544", "usgDate": "2026-08-06", "weeks": 15, "days": 2, "statusMorfo1": "Enviado", "statusSexo": "Enviado", "statusMorfo2": "Aguardando", "statusDoppler": "Aguardando" },
+            { "id": 13, "name": "VITORIA KAROLINE SILVA LIMA", "phone": "85986226268", "usgDate": "2026-08-05", "weeks": 21, "days": 0, "statusMorfo1": "Enviado", "statusSexo": "Enviado", "statusMorfo2": "Enviado", "statusDoppler": "Aguardando" },
+            { "id": 14, "name": "AMANDA VIRNA DE ABREU VIEIRA", "phone": "85998219824", "usgDate": "2026-08-05", "weeks": 6, "days": 1, "statusMorfo1": "Aguardando", "statusSexo": "Aguardando", "statusMorfo2": "Aguardando", "statusDoppler": "Aguardando" },
+            { "id": 15, "name": "AGLICIA OLIVEIRA DA SILVA", "phone": "85985242050", "usgDate": "2026-08-06", "weeks": 23, "days": 2, "statusMorfo1": "Enviado", "statusSexo": "Enviado", "statusMorfo2": "Enviado", "statusDoppler": "Aguardando" },
+            { "id": 16, "name": "FRANCYELEN JUDITH COSTA RIBEIRO", "phone": "8591697110", "usgDate": "2026-08-06", "weeks": 7, "days": 6, "statusMorfo1": "Aguardando", "statusSexo": "Aguardando", "statusMorfo2": "Aguardando", "statusDoppler": "Aguardando" },
+            { "id": 17, "name": "BRENDA SILVA GIFONI", "phone": "85997059690", "usgDate": "2026-08-07", "weeks": 22, "days": 0, "statusMorfo1": "Enviado", "statusSexo": "Enviado", "statusMorfo2": "Enviado", "statusDoppler": "Aguardando" },
+            { "id": 18, "name": "GERMANA PAULA DE ALCANTA PINTO", "phone": "85991244996", "usgDate": "2026-08-08", "weeks": 16, "days": 3, "statusMorfo1": "Enviado", "statusSexo": "Enviado", "statusMorfo2": "Aguardando", "statusDoppler": "Aguardando" },
+            { "id": 19, "name": "MARIA GLEUBA DOS SANTOS", "phone": "85992718216", "usgDate": "2026-08-08", "weeks": 11, "days": 6, "statusMorfo1": "Enviado", "statusSexo": "Aguardando", "statusMorfo2": "Aguardando", "statusDoppler": "Aguardando" },
+            { "id": 20, "name": "MARIA DEILHA DO NASCIMENTO TEIXEIRA", "phone": "85987336514", "usgDate": "2026-08-08", "weeks": 12, "days": 2, "statusMorfo1": "Enviado", "statusSexo": "Aguardando", "statusMorfo2": "Aguardando", "statusDoppler": "Aguardando" },
+            { "id": 21, "name": "DANIELE DA SILVA GOMES", "phone": "85991609460", "usgDate": "2026-08-08", "weeks": 12, "days": 2, "statusMorfo1": "Enviado", "statusSexo": "Aguardando", "statusMorfo2": "Aguardando", "statusDoppler": "Aguardando" },
+            { "id": 22, "name": "MAYARA OLIVEIRA CAMILO", "phone": "85992025372", "usgDate": "2026-08-08", "weeks": 22, "days": 4, "statusMorfo1": "Enviado", "statusSexo": "Enviado", "statusMorfo2": "Enviado", "statusDoppler": "Aguardando" },
+            { "id": 23, "name": "ISIS DALILA FROTA PINHEIRO", "phone": "85996174000", "usgDate": "2026-08-08", "weeks": 8, "days": 1, "statusMorfo1": "Aguardando", "statusSexo": "Aguardando", "statusMorfo2": "Aguardando", "statusDoppler": "Aguardando" },
+            { "id": 24, "name": "FRANCISCA LARISSE DE SOUSA BRAGA", "phone": "85992973312", "usgDate": "2026-08-10", "weeks": 20, "days": 0, "statusMorfo1": "Enviado", "statusSexo": "Enviado", "statusMorfo2": "Enviado", "statusDoppler": "Aguardando" },
+            { "id": 25, "name": "RUTH MENEZES ALVES", "phone": "85988933911", "usgDate": "2026-08-10", "weeks": 22, "days": 4, "statusMorfo1": "Enviado", "statusSexo": "Enviado", "statusMorfo2": "Enviado", "statusDoppler": "Aguardando" },
+            { "id": 26, "name": "LARISA NOGUEIRA FREITAS", "phone": "85996003002", "usgDate": "2026-08-10", "weeks": 22, "days": 3, "statusMorfo1": "Enviado", "statusSexo": "Enviado", "statusMorfo2": "Enviado", "statusDoppler": "Aguardando" },
+            { "id": 27, "name": "KAROLAINE SOUSA BARBOSA", "phone": "85986923832", "usgDate": "2026-08-10", "weeks": 23, "days": 2, "statusMorfo1": "Enviado", "statusSexo": "Enviado", "statusMorfo2": "Enviado", "statusDoppler": "Aguardando" },
+            { "id": 28, "name": "JULIANA MARTINS AMORA", "phone": "85991248650", "usgDate": "2026-08-10", "weeks": 23, "days": 4, "statusMorfo1": "Enviado", "statusSexo": "Enviado", "statusMorfo2": "Enviado", "statusDoppler": "Aguardando" },
+            { "id": 29, "name": "NATALIA PAULA DE OLIVEIRA LOPES", "phone": "85999441327", "usgDate": "2026-08-10", "weeks": 13, "days": 3, "statusMorfo1": "Enviado", "statusSexo": "Aguardando", "statusMorfo2": "Aguardando", "statusDoppler": "Aguardando" },
+            { "id": 30, "name": "ADRESSA DA SILVA BRAGA", "phone": "85997373129", "usgDate": "2026-08-10", "weeks": 20, "days": 4, "statusMorfo1": "Enviado", "statusSexo": "Enviado", "statusMorfo2": "Enviado", "statusDoppler": "Aguardando" }
+        ];
+
+        let currentStatusFilter = 'all';
+        const TODAY = new Date("2026-08-11T12:00:00");
+
+        function changeTheme(themeName) {
+            const body = document.getElementById('app-body');
+            body.className = `antialiased ${themeName}`;
+            localStorage.setItem('doutormed_theme', themeName);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('doutormed_theme');
+            if(savedTheme) {
+                document.getElementById('app-body').className = `antialiased ${savedTheme}`;
+                document.getElementById('theme-selector').value = savedTheme;
+            }
+            renderDashboard();
+        });
+
+        function formatDateBr(dateObj) {
+            return dateObj.toLocaleDateString('pt-BR', {timeZone: 'UTC'});
+        }
+
+        function addDays(date, days) {
+            let result = new Date(date);
+            result.setDate(result.getDate() + days);
+            return result;
+        }
+
+        function setStatusFilter(filterType) {
+            currentStatusFilter = filterType;
+            const btnAll = document.getElementById('btn-filter-all');
+            const btnToday = document.getElementById('btn-filter-today');
+            const btnPending = document.getElementById('btn-filter-pending');
+            const btnSent = document.getElementById('btn-filter-sent');
+
+            [btnAll, btnToday, btnPending, btnSent].forEach(btn => {
+                btn.style.backgroundColor = "transparent";
+                btn.style.color = "var(--text-muted)";
+                btn.style.boxShadow = "none";
+            });
+
+            if(filterType === 'all') { btnAll.style.backgroundColor = "var(--bg-card)"; btnAll.style.color = "var(--text-main)"; btnAll.style.boxShadow = "0 1px 2px rgba(0,0,0,0.05)"; }
+            if(filterType === 'today') { btnToday.style.backgroundColor = "var(--bg-card)"; btnToday.style.color = "var(--text-main)"; btnToday.style.boxShadow = "0 1px 2px rgba(0,0,0,0.05)"; }
+            if(filterType === 'pending') { btnPending.style.backgroundColor = "var(--bg-card)"; btnPending.style.color = "var(--text-main)"; btnPending.style.boxShadow = "0 1px 2px rgba(0,0,0,0.05)"; }
+            if(filterType === 'sent') { btnSent.style.backgroundColor = "var(--bg-card)"; btnSent.style.color = "var(--text-main)"; btnSent.style.boxShadow = "0 1px 2px rgba(0,0,0,0.05)"; }
+
+            renderDashboard();
+        }
+
+        function deletePatient(id) {
+            if(confirm("Tem certeza que deseja excluir esta paciente do sistema?")) {
+                patients = patients.filter(p => p.id !== id);
+                renderDashboard();
+            }
+        }
+
+        function openEditModal(id) {
+            const p = patients.find(x => x.id === id);
+            if(!p) return;
+
+            document.getElementById('edit-id').value = p.id;
+            document.getElementById('edit-name').value = p.name;
+            document.getElementById('edit-phone').value = p.phone;
+            document.getElementById('edit-usg-date').value = p.usgDate;
+            document.getElementById('edit-weeks').value = p.weeks;
+            document.getElementById('edit-days').value = p.days;
+            document.getElementById('edit-morfo1').value = p.statusMorfo1;
+            document.getElementById('edit-sexo').value = p.statusSexo;
+            document.getElementById('edit-morfo2').value = p.statusMorfo2;
+            document.getElementById('edit-doppler').value = p.statusDoppler;
+
+            document.getElementById('edit-modal').classList.remove('hidden');
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-modal').classList.add('hidden');
+        }
+
+        document.getElementById('edit-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const id = parseInt(document.getElementById('edit-id').value);
+            const p = patients.find(x => x.id === id);
+
+            if(p) {
+                p.name = document.getElementById('edit-name').value.toUpperCase();
+                p.phone = document.getElementById('edit-phone').value.replace(/\D/g, '');
+                p.usgDate = document.getElementById('edit-usg-date').value;
+                p.weeks = parseInt(document.getElementById('edit-weeks').value);
+                p.days = parseInt(document.getElementById('edit-days').value);
+                p.statusMorfo1 = document.getElementById('edit-morfo1').value;
+                p.statusSexo = document.getElementById('edit-sexo').value;
+                p.statusMorfo2 = document.getElementById('edit-morfo2').value;
+                p.statusDoppler = document.getElementById('edit-doppler').value;
+
+                renderDashboard();
+                closeEditModal();
+            }
+        });
+
+        function calculateGestationalData(p) {
+            const usg = new Date(p.usgDate + "T12:00:00");
+            const totalDaysAtUsg = (p.weeks * 7) + p.days;
+            const dum = addDays(usg, -totalDaysAtUsg);
+
+            const diffTime = TODAY.getTime() - usg.getTime();
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const totalCurrentDays = totalDaysAtUsg + diffDays;
+            
+            const currentWeeks = Math.floor(totalCurrentDays / 7);
+            const currentDays = totalCurrentDays % 7;
+
+            return {
+                dum,
+                currentWeeks,
+                currentDays,
+                exames: [
+                    { type: 'morfo1', label: 'Morfo 1º Tri', start: addDays(dum, 12 * 7), end: addDays(dum, (13 * 7) + 6), status: p.statusMorfo1 },
+                    { type: 'sexo', label: 'Sexo', start: addDays(dum, 16 * 7), end: addDays(dum, 16 * 7), status: p.statusSexo },
+                    { type: 'morfo2', label: 'Morfo 2º Tri', start: addDays(dum, 20 * 7), end: addDays(dum, 24 * 7), status: p.statusMorfo2 },
+                    { type: 'doppler', label: 'Doppler 3º Tri', start: addDays(dum, 28 * 7), end: addDays(dum, 32 * 7), status: p.statusDoppler }
+                ]
+            };
+        }
+
+        function triggerWhatsApp(patientId, type) {
+            const p = patients.find(x => x.id === patientId);
+            if (!p) return;
+            
+            const calc = calculateGestationalData(p);
+            const ex = calc.exames.find(e => e.type === type);
+            let text = "";
+
+            if (type === 'morfo1') {
+                text = `Olá, ${p.name}! 🌸\n\nEstá chegando a hora do seu Ultrassom Morfológico do 1º Trimestre, que deve ser realizado entre ${formatDateBr(ex.start)} e ${formatDateBr(ex.end)}. 🤍\n\nVamos agendar esse momento especial? 💚\nClínica DoutorMed – Fortaleza`;
+                p.statusMorfo1 = "Enviado";
+            } else if (type === 'sexo') {
+                text = `Olá, ${p.name}! 🌸\n\nChegou um dos momentos mais esperados! 💕 A partir de 16 semanas já é possível descobrir o sexo do bebê, e a data prevista do seu exame é ${formatDateBr(ex.start)}.\n\nVamos agendar? 💚\nClínica DoutorMed – Fortaleza`;
+                p.statusSexo = "Enviado";
+            } else if (type === 'morfo2') {
+                text = `Olá, ${p.name}! 🌸\n\nEstá chegando a hora do seu Ultrassom Morfológico do 2º Trimestre, que deve ser realizado entre ${formatDateBr(ex.start)} e ${formatDateBr(ex.end)}. 🤍\n\nVamos agendar? 💚\nClínica DoutorMed – Fortaleza`;
+                p.statusMorfo2 = "Enviado";
+            } else if (type === 'doppler') {
+                text = `Olá, ${p.name}! 🌸\n\nEstá chegando a hora do seu Ultrassom com Doppler do 3º Trimestre, que deve ser realizado entre ${formatDateBr(ex.start)} e ${formatDateBr(ex.end)}. 🤍\n\nVamos agendar? 💚\nClínica DoutorMed – Fortaleza`;
+                p.statusDoppler = "Enviado";
+            }
+
+            renderDashboard();
+            window.open(`https://api.whatsapp.com/send?phone=55${p.phone}&text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        function getStatusBadge(status, patientId, type) {
+            let colorClass = "bg-gray-100 text-gray-600 border-gray-200";
+            if (status === "Enviado") colorClass = "bg-sky-500/10 text-sky-400 border-sky-500/20";
+            if (status === "Aguardando") colorClass = "bg-amber-500/10 text-amber-400 border-amber-500/20";
+
+            return `
+                <div class="flex flex-col space-y-1">
+                    <span class="px-2 py-0.5 text-[11px] font-bold rounded-full border ${colorClass} text-center w-max">
+                        ${status}
+                    </span>
+                    <button onclick="triggerWhatsApp(${patientId}, '${type}')" class="text-left text-xs dynamic-text hover:opacity-80 transition flex items-center space-x-1 font-medium mt-1">
+                        <i class="fa-brands fa-whatsapp text-sm text-emerald-500"></i>
+                        <span>Disparar</span>
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderDashboard() {
+            const tableBody = document.getElementById("patient-table-body");
+            const searchTerm = document.getElementById("search-bar").value.toLowerCase();
+            tableBody.innerHTML = "";
+
+            let countTotal = patients.length;
+            let countToday = 0;
+            let countSoon = 0;
+            let countSentPatients = 0;
+            let countFiltered = 0;
+
+            const hojeAbsoluto = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate()).getTime();
+
+            patients.forEach(p => {
+                const calc = calculateGestationalData(p);
+                
+                let temNotificacaoEnviada = false;
+                let deveContatarHoje = false;
+                let estariaEmBreve = false;
+
+                calc.exames.forEach(ex => {
+                    if (ex.status === "Enviado") {
+                        temNotificacaoEnviada = true;
+                    }
+                    if (ex.status === "Aguardando") {
+                        const inicioAbsoluto = new Date(ex.start.getFullYear(), ex.start.getMonth(), ex.start.getDate()).getTime();
+                        const fimAbsoluto = new Date(ex.end.getFullYear(), ex.end.getMonth(), ex.end.getDate()).getTime();
+                        
+                        if (hojeAbsoluto >= inicioAbsoluto && hojeAbsoluto <= fimAbsoluto) {
+                            deveContatarHoje = true;
+                        }
+                        else if (inicioAbsoluto > hojeAbsoluto) {
+                            const diffDays = Math.round((inicioAbsoluto - hojeAbsoluto) / (1000 * 60 * 60 * 24));
+                            if (diffDays <= 7) {
+                                estariaEmBreve = true;
+                            }
+                        }
+                    }
+                });
+
+                if (deveContatarHoje) countToday++;
+                if (estariaEmBreve) countSoon++;
+                if (temNotificacaoEnviada) countSentPatients++;
+
+                if (currentStatusFilter === 'today' && !deveContatarHoje) return;
+                const temPendente = calc.exames.some(e => e.status === "Aguardando");
+                if (currentStatusFilter === 'pending' && !temPendente) return;
+                if (currentStatusFilter === 'sent' && !temNotificacaoEnviada) return;
+
+                if (searchTerm && !p.name.toLowerCase().includes(searchTerm) && !p.phone.includes(searchTerm)) {
+                    return;
+                }
+
+                countFiltered++;
+
+                const row = document.createElement("tr");
+                row.className = "transition border-b";
+                row.innerHTML = `
+                    <td class="py-4 px-6">
+                        <div class="font-bold">${p.name}</div>
+                        <div class="text-xs mt-0.5 flex items-center" style="color: var(--text-muted);"><i class="fa-solid fa-phone mr-1 opacity-50"></i> ${p.phone}</div>
+                    </td>
+                    <td class="py-4 px-4 font-semibold whitespace-nowrap">
+                        <span class="dynamic-text dynamic-badge px-3 py-1.5 rounded-xl text-xs font-bold border inline-block">${calc.currentWeeks} sem. e ${calc.currentDays} dias</span>
+                    </td>
+                    <td class="py-4 px-4 text-xs font-semibold whitespace-nowrap" style="color: var(--text-muted);">${formatDateBr(calc.dum)}</td>
+                    <td class="py-4 px-4 text-xs border-r" style="border-color: var(--border-color);">
+                        <div class="font-bold mb-1">${formatDateBr(calc.exames[0].start)} a ${formatDateBr(calc.exames[0].end)}</div>
+                        ${getStatusBadge(p.statusMorfo1, p.id, 'morfo1')}
+                    </td>
+                    <td class="py-4 px-4 text-xs border-r" style="border-color: var(--border-color);">
+                        <div class="font-bold mb-1">${formatDateBr(calc.exames[1].start)}</div>
+                        ${getStatusBadge(p.statusSexo, p.id, 'sexo')}
+                    </td>
+                    <td class="py-4 px-4 text-xs border-r" style="border-color: var(--border-color);">
+                        <div class="font-bold mb-1">${formatDateBr(calc.exames[2].start)} a ${formatDateBr(calc.exames[2].end)}</div>
+                        ${getStatusBadge(p.statusMorfo2, p.id, 'morfo2')}
+                    </td>
+                    <td class="py-4 px-4 text-xs border-r" style="border-color: var(--border-color);">
+                        <div class="font-bold mb-1">${formatDateBr(calc.exames[3].start)} a ${formatDateBr(calc.exames[3].end)}</div>
+                        ${getStatusBadge(p.statusDoppler, p.id, 'doppler')}
+                    </td>
+                    <td class="py-4 px-6 text-center">
+                        <div class="flex items-center justify-center space-x-2">
+                            <button onclick="openEditModal(${p.id})" class="dynamic-text hover:opacity-80 p-2 rounded-xl transition" title="Editar Paciente e Status">
+                                <i class="fa-solid fa-pen-to-square text-base"></i>
+                            </button>
+                            <button onclick="deletePatient(${p.id})" class="text-red-400 hover:text-red-300 p-2 rounded-xl transition" title="Excluir Paciente">
+                                <i class="fa-solid fa-trash-can text-base"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            document.getElementById("filter-counter").innerText = `Filtrados: ${countFiltered}`;
+            document.getElementById("stat-total").innerText = countTotal;
+            document.getElementById("stat-today").innerText = countToday;
+            document.getElementById("stat-soon").innerText = countSoon;
+            document.getElementById("stat-sent").innerText = countSentPatients;
+        }
+
+        document.getElementById("patient-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const newPatient = {
+                id: Date.now(),
+                name: document.getElementById("input-name").value.toUpperCase(),
+                phone: document.getElementById("input-phone").value.replace(/\D/g, ''),
+                usgDate: document.getElementById("input-usg-date").value,
+                weeks: parseInt(document.getElementById("input-weeks").value),
+                days: parseInt(document.getElementById("input-days").value),
+                statusMorfo1: "Aguardando",
+                statusSexo: "Aguardando",
+                statusMorfo2: "Aguardando",
+                statusDoppler: "Aguardando"
+            };
+
+            patients.unshift(newPatient);
+            renderDashboard();
+            document.getElementById("patient-form").reset();
+        });
+
+        document.getElementById("search-bar").addEventListener("input", renderDashboard);
+    </script>
+</body>
+</html>
